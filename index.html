@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="Event Camera, Visual Grounding, Dynamic Scene">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Talk2Event</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+
+  <link rel="icon" href="./static/images/friends.png" type="image/x-icon">
+
+
+  <style>
+    .a {
+      color: rgb(0, 180, 139);
+    }
+
+    .columns {
+      display: flex;
+      justify-content: flex-start;
+      padding: 5px;
+      text-align: left;
+    }
+
+    .tag {
+      background-color: #f5f5f5;
+      border-radius: 3px;
+      padding: 5px;
+      margin-right: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+
+  <link rel="icon" href="./static/images/favicon.ico" type="image/x-icon">
+  <!-- <link rel="apple-touch-icon" sizes="180x180" href="./static/images/apple-touch-icon.png"> -->
+
+
+
+  <style>
+    #backToTopBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 50px;
+      z-index: 999;
+      background-color: rgb(239,99,75);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 12px 16px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+      transition: opacity 0.3s;
+      display: none;
+    }
+    
+    #backToTopBtn:hover {
+      background-color: rgb(99,113,250);
+    }
+    
+    @media (max-width: 768px) {
+      #backToTopBtn {
+        font-size: 18px;
+        padding: 10px 14px;
+      }
+    }
+
+    .img-hover-effect {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .img-hover-effect:hover {
+      transform: scale(1.05); /* Zoom to 105% */
+    }
+    </style>
+
+</head>
+
+
+
+
+<body>
+
+
+  <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top">↑</button>
+  <script>
+    window.onscroll = function() {
+      scrollFunction();
+    };
+    function scrollFunction() {
+      const button = document.getElementById("backToTopBtn");
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        button.style.display = "block";
+      } else {
+        button.style.display = "none";
+      }
+    }
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+  
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+              <img src="./static/images/friends.png" style="height: 48px; vertical-align: top" class="img-hover-effect">&thinsp;Talk2Event: Grounded Understanding of Dynamic Scenes from Event Cameras
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section" style="margin-top: -100px;"></section>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class=" column is-full-width has-text-centered">
+      </br>
+      <img src="./static/images/teaser.png" />
+      <div class="content has-text-justified" style="padding-top: 10px">
+        <p class="has-text-centered">
+          <strong>Grounded scene understanding from event streams.</strong>
+          This work presents <strong>Talk2Event</strong>, a novel task for localizing objects from event cameras using natural language, where each unique object in the scene is defined by <strong>four key attributes</strong>:
+          <sup>1</sup><strong><span style="color: rgb(239,99,75)">Appearance</span></strong>,
+          <sup>2</sup><strong><span style="color: rgb(99,113,250)">Status</span></strong>,
+          <sup>3</sup><strong><span style="color: rgb(0,180,139)">Relation-to-Viewer</span></strong>, and
+          <sup>3</sup><strong><span style="color: rgb(109,109,109)">Relation-to-Others</span></strong>.
+          We find that modeling these attributes enables precise, interpretable, and temporally-aware grounding across diverse dynamic environments in the real world.
+        </p>
+      </div>
+      <hr>
+    </div>
+  </div>
+  </div>
+  </section>
+
+
+  <section class="section" style="margin-top: 0px;">
+    <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified" style="padding-top: 0px">
+            <p>
+              Event cameras offer microsecond-level latency and robustness to motion blur, making them ideal for understanding dynamic environments. 
+              Yet, connecting these asynchronous streams to human language remains an open challenge. 
+              We introduce <strong>Talk2Event</strong>, the first large-scale benchmark for <i>language-driven object grounding in event-based perception</i>. 
+              Built from real-world driving data, we provide over 30,000 validated referring expressions, each enriched with four grounding attributes -- <i>appearance</i>, <i>status</i>, <i>relation to viewer</i>, and <i>relation to other objects</i> -- bridging spatial, temporal, and relational reasoning. 
+              To fully exploit these cues, we propose <strong>EventRefer</strong>, an <i>attribute-aware grounding framework</i> that dynamically fuses multi-attribute representations through a <i>Mixture of Event-Attribute Experts (MoEE)</i>. 
+              Our method adapts to different modalities and scene dynamics, achieving consistent gains over state-of-the-art baselines in event-only, frame-only, and event-frame fusion settings. 
+              We hope our dataset and approach will establish a foundation for advancing multimodal, temporally-aware, and language-driven perception in real-world robotics and autonomy.
+            </p>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section" style="margin-top: -100px;"></section>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class=" column is-full-width has-text-centered">
+      <h2 class="title is-3">Data Curation Pipeline</h2>
+      <img src="./static/images/pipeline.png" />
+      <div class="content has-text-justified" style="padding-top: 10px">
+        <p class="has-text-centered">
+          <strong>Figure.</strong> We leverage <strong>two surrounding frames</strong> to generate <strong>context-aware referring expressions</strong> at t<sub>0</sub>, covering appearance, motion, spatial relations, and interactions. 
+          Word clouds on the right highlight distinct linguistic patterns across the four grounding attributes.
+        </p>
+      </div>
+      <hr>
+    </div>
+  </div>
+  </div>
+  </section>
+
+
+  </br></br>
+
+
+  <div class="columns is-centered has-text-centered">
+    <div class="ontainer is-max-desktop">
+      <h2 class="title is-3">
+        Benchmark Comparison
+      </h2>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable">
+          <thead>
+            <tr>
+              <th>Dataset</th>
+              <th>Venue</th>
+              <th>Sensor</th>
+              <th>Scene Type</th>
+              <th>Scenes</th>
+              <th>Objects</th>
+              <th>Expr.</th>
+              <th>Avg Len.</th>
+              <th>&delta;<sub><strong><span style="color: rgb(239,99,75)">a</span></strong></sub></th>
+              <th>&delta;<sub><strong><span style="color: rgb(99,113,250)">s</span></strong></sub></th>
+              <th>&delta;<sub><strong><span style="color: rgb(0,180,139)">v</span></strong></sub></th>
+              <th>&delta;<sub><strong><span style="color: rgb(109,109,109)">o</span></strong></sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RefCOCO+</td><td>ECCV'16</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"><td>Static</td>
+              <td>19,992</td><td>49,856</td><td>141,564</td><td>3.53</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td>
+            </tr>
+            <tr>
+              <td>RefCOCOg</td><td>ECCV'16</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>26,711</td><td>54,822</td><td>85,474</td><td>8.43</td><td>✓</td><td>✗</td><td>✗</td><td>✓</td>
+            </tr>
+            <tr>
+              <td>Nr3D</td><td>ECCV'20</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"> <img src="static/images/rgbd.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>707</td><td>5,878</td><td>41,503</td><td>-</td><td>✓</td><td>✗</td><td>✗</td><td>✓</td>
+            </tr>
+            <tr>
+              <td>Sr3D</td><td>ECCV'20</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"> <img src="static/images/rgbd.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>1,273</td><td>8,863</td><td>83,572</td><td>-</td><td>✓</td><td>✗</td><td>✗</td><td>✓</td>
+            </tr>
+            <tr>
+              <td>ScanRefer</td><td>ECCV'20</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"> <img src="static/images/rgbd.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>800</td><td>11,046</td><td>51,583</td><td>20.3</td><td>✓</td><td>✗</td><td>✗</td><td>✓</td>
+            </tr>
+            <tr>
+              <td>Text2Pos</td><td>CVPR'22</td><td><img src="static/images/lidar.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>-</td><td>6,800</td><td>43,381</td><td>-</td><td>✓</td><td>✗</td><td>✓</td><td>✗</td>
+            </tr>
+            <tr>
+              <td>CityRefer</td><td>NeurIPS'23</td><td><img src="static/images/lidar.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>-</td><td>5,866</td><td>35,196</td><td>-</td><td>✓</td><td>✗</td><td>✗</td><td>✓</td>
+            </tr>
+            <tr>
+              <td>Ref-KITTI</td><td>CVPR'23</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>6,650</td><td>-</td><td>818</td><td>-</td><td>✓</td><td>✗</td><td>✓</td><td>✗</td>
+            </tr>
+            <tr>
+              <td>M3DRefer</td><td>AAAI'24</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>2,025</td><td>8,228</td><td>41,140</td><td>53.2</td><td>✓</td><td>✗</td><td>✓</td><td>✗</td>
+            </tr>
+            <tr>
+              <td>STRefer</td><td>ECCV'24</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"> <img src="static/images/lidar.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>662</td><td>3,581</td><td>5,458</td><td>-</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td>
+            </tr>
+            <tr>
+              <td>LifeRefer</td><td>ECCV'24</td><td><img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;"> <img src="static/images/lidar.png" loading="lazy" style="height: 20px; vertical-align: top;"></td><td>Static</td>
+              <td>3,172</td><td>11,864</td><td>25,380</td><td>-</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td>
+            </tr>
+            <tr style="font-weight:bold;">
+              <td><img src="static/images/friends.png" loading="lazy" style="height: 20px; vertical-align: top;"> Talk2Event</td><td>Ours</td><td>
+                <img src="static/images/frame.png" loading="lazy" style="height: 20px; vertical-align: top;">
+                <img src="static/images/event-camera.png" loading="lazy" style="height: 20px; vertical-align: top;">
+                <img src="static/images/lidar.png" loading="lazy" style="height: 20px; vertical-align: top;">
+              </td>
+              <td>Dynamic</td><td>5,567</td><td>13,458</td><td>30,690</td><td>34.1</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div><hr>
+    </div>
+  </div>
+  
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+          <h2 class="title is-3">The <img src="./static/images/friends.png" style="height: 31px; vertical-align: top" class="img-hover-effect">&thinsp;Talk2Event Dataset</h2>
+          
+          <p>
+            Data examples of the <i class="fa fa-car"></i></span>&thinsp;<b>Car</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/car-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-car"></i></span>&thinsp;<b>Car</b> class under the <b>Nighttime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/car-1-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-1-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-1-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-2-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-2-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-2-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-3-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-3-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-3-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-4-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-4-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-4-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/car-5-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-5-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/car-5-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-truck"></i></span>&thinsp;<b>Truck</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/truck-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/truck-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/truck-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/truck-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/truck-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/truck-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-bus"></i></span>&thinsp;<b>Bus</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/bus-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bus-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bus-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bus-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bus-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bus-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-male"></i></span>&thinsp;<b>Pedestrian</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-male"></i></span>&thinsp;<b>Pedestrian</b> class under the <b>Nighttime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-1-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-1-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-1-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-2-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-2-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-2-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-3-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-3-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-3-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-4-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-4-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-4-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/pedestrian-5-evt-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-5-rgb-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/pedestrian-5-exp-night.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-bicycle"></i></span>&thinsp;<b>Bicycle</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/bicycle-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bicycle-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bicycle-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bicycle-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/bicycle-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/bicycle-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr>
+
+          <p>
+            Data examples of the <i class="fa fa-motorcycle"></i></span>&thinsp;<b>Motorcycle</b> class under the <b>Daytime</b> condition in our dataset.
+          </p>
+          <table class="table is-bordered is-striped is-narrow is-hoverable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="vertical-align: middle;"><b>Event Stream</b></th>
+                <th style="vertical-align: middle;"><b>RGB Frame</b></th>
+                <th style="vertical-align: middle;"><b>Referring Expression</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="./static/images/data/motor-1-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-1-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-1-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/motor-2-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-2-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-2-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/motor-3-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-3-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-3-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/motor-4-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-4-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-4-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+              <tr>
+                <td><img src="./static/images/data/motor-5-evt.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-5-rgb.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+                <td><img src="./static/images/data/motor-5-exp.png" style="height: 200px; object-fit: contain;" class="img-hover-effect" loading="lazy"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div><hr>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International</a> license.
+            </p>
+            <p>
+              We thank the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> authors for their
+              template, which we used as a basis for our website.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>
