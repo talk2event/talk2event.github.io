@@ -187,35 +187,35 @@ body {
 
 /* Define base button styles for the links */
 .paper-btn {
-  background-color: rgb(0, 180, 139);
+  background-color: rgb(239,99,75);
   color: white;
-  border-color: rgb(0, 180, 139);
+  border-color: rgb(239,99,75);
 }
 
 .arxiv-btn {
-  background-color: rgb(239, 99, 75);
+  background-color: rgb(99,113,250);
   color: white;
-  border-color: rgb(239, 99, 75);
+  border-color: rgb(99,113,250);
 }
 
 .video-btn {
-  background-color: rgb(0, 180, 139);
+  background-color: rgb(239,99,75);
   color: white;
-  border-color: rgb(0, 180, 139);
+  border-color: rgb(239,99,75);
 }
 
 /* Hover effects */
 .paper-btn:hover {
-  background-color: rgb(0, 150, 120);
-  border-color: rgb(0, 150, 120);
+  background-color: rgb(99,113,250);
+  border-color: rgb(99,113,250);
 }
 
 .arxiv-btn:hover {
-  background-color: rgb(220, 70, 50);
-  border-color: rgb(220, 70, 50);
+  background-color: rgb(239,99,75);
+  border-color: rgb(239,99,75);
 }
 
 .video-btn:hover {
-  background-color: rgb(0, 150, 120);
-  border-color: rgb(0, 150, 120);
+  background-color: rgb(99,113,250);
+  border-color: rgb(99,113,250);
 }
